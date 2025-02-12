@@ -1,170 +1,188 @@
-# Продвинутое программирование на PHP - Laravel
-## Урок 4. Работа с шаблонами. Шаблонизатор Blade
+# Продвинутое программирование на PHP — Laravel
+## Урок 5. Обработка запроса (Request)
 ### Домашнее задание
 <br><br>
-#### Цели практической работы:<br>
+Цели практической работы:
 
-#### Научиться:<br>
+Научиться:
 
-• создавать шаблоны blade и переиспользовать их;<br>
-• применять вложенные шаблоны на практике;<br>
-• передавать динамические данные на страницу;<br>
-• использовать директивы.<br>
+— использовать класс Laravel Request на практике;
+— получать параметры запроса из полей ввода и адресной строки;
+— передавать данные в формате JSON из полей ввода в класс Laravel Request.
 
+Что нужно сделать:
 
-#### Что нужно сделать:<br>
+В этой практической работе вы будете получать данные из формы и обрабатывать их в контроллере с помощью встроенных методов класса Illuminate\Http\Request.
 
-1. Создайте новый проект Laravel или откройте уже существующий проект, в который хотите добавить шаблоны.
+1. В соответствующих каталогах создайте три файла:
+   — blade-шаблон для создания пользовательских инпутов;
+   — EmployeeController для обработки полученных данных из полей формы;
+   — Route для создания динамического роутинга для отдельного работника и передачи параметра id из адресной строки.
 
-2. Создайте новую ветку вашего репозитория от корневой (main или master).
-
-3. В корневом каталоге проекта создайте подкаталог resources/views. Создайте в нём два шаблона: home.blade.php и contacts.blade.php. Вы заполните эти шаблоны позже.
-
-4. В файле routes/web.php создайте необходимые роуты для навигации по страницам и передачи данных:
-
-- Первый роут - '/', ссылается на корневую страницу проекта. Route::get должен возвращать функцию view. Первым аргументом передайте шаблон home, вторым аргументом - массив данных с ключами name, age, position, address. Значения могут быть произвольными. <br>
-
-- Второй роут - '/contacts', ссылается на одноимённую страницу с контактами. По аналогии с первым роутом верните из роута функцию view, передайте шаблон contacts и массив с данными - address, post_code, email, phone. <br>
-
-5. В директории views создайте подкаталог layouts, внутри которого поместите шаблон default.blade.php:<br>
-![](archives/pic-4-1.jpg)
-```
-<!doctype html>
-<html>
-   <head>
-             @include('includes.head')
-   </head>
-    <body>
-        <divclass="container">
-            <header class="row">
-                @include('includes.header')
-            </header>
-            <div id="main" class="row">
-                @yield('content')
-            </div>
-            <footer class="row">
-                @include('includes.foote')
-            </footer>
-        </div>
-    </body>
-</html>
-
+2. В blade-шаблоне создайте форму, которая будет отправлять данные о работнике.<br>
+![](archives/pic-5-1.jpg)
 
 ```
-6. Как видно из картинки выше, вам необходимо создать переиспользуемые шаблоны для тегов ```<head>```, ```<footer>``` и ```<hеader>```. Для этого в папке views создайте подкаталог includes, а в ней, по аналогии уже с созданными страницами: <br>
-  три соответствующих шаблона с произвольной вёрсткой и вложенностью.
-
-7. Вернёмся к страницам home и contacts:<br>
-![](archives/pic-4-2.jpg)
+<form mane="employee-form" id="mployee-forn" method="port" action="{{url('store-form'}}>
+@csrf
+<div clanse"form-group">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" class="forn-control" required="true">
+</div>
+<div class="form-group">
+    <label for="enail" Description</label>
+    <input type="email" id="email" name="email" class="form-control" require="true">
+</div>
+<div class="form group">
+    <label for="workData">workData</1abel>
+    <textarea nane="workData" class="form-control" required="true">textarea</textarea> 
+</div>
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
 ```
-@extends('layouts.default')
-@section('content')
-// Здесь добавить верстку с выводом переменных данных внутри роутера
-@stop
-```
-8. Внутри директивы @section добавьте базовую HTML-разметку. Для каждой страницы воспользуйтесь директивой @if. Если значение age для страницы home больше 18 лет, выводите простую цифру, в противном случае - предупреждающее сообщение о том, что указанный человек слишком молод. То же самое повторите и со страницей контактов.
-   Если вместо почты в шаблон приходит пустая строка, выведите сообщение:
-   «Адрес электронной почты не указан».
 
-9. Сделайте коммит изменений с помощью Git и отправьте push в репозиторий.
+По аналогии с приведённым выше примером создайте ещё несколько полей ввода. Например, поля «Фамилия работника», «Занимаемая должность» и «Адрес проживания». Обратите внимание, что у всех полей формы есть атрибут required=”true”. Это важно для полноты получаемых данных от клиента к серверу.
 
-<br><br>
-
-### Домашнее задание
-<br><br>
-
-1. composer create-project laravel/laravel php-blade
-2. cd php-blade
-3. php artisan serve
-4. Подключаем репозиторий:
+3. Создайте новый контроллер с названием EmployeeController. Напомним, что создавать контроллер нужно из консоли с помощью команды:<br>
+![](archives/pic-5-2.jpg)
 
 ```
-git init
-git add .
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/stanislavfor/php-blade.git
-git push -u origin main
+php artisan make:controller EmployeeController
+```
+4. Внутри контроллера создайте функцию store, которая будет инициализировать соответствующие переменные и сохранять в них данные из вашей формы:<br>
+![](archives/pic-5-3.jpg)
 
 ```
-5. Записываем содержимое web.php, например:
+namespace App\Http\Controllers;
+use Illuminate\Http\Request; 
+class EmployeeController extends Controller
+{
+    public function index()
+    {
+        return view('get-employee-data');
+    }
+    public function store(Request $request)
+    {
+        $name Srequest->input("name");
+        $email = Srequest->input('email');
+        // продолжите код тут..
+    }
+}
 ```
-<?php
 
-use Illuminate\Support\Facades\Route;
+Добавьте все необходимые переменные в соответствии с вашими полями. Обратите внимание, что мы также создали функцию index, которая просто возвращает необходимый view.
 
-Route::get('/', function () {
-    return view('home', [
-        'name' => 'John Doe',
-        'age' => 35,
-        'position' => 'Developer',
-        'address' => 'Anytown, USA'
-    ]);
-});
+5. Как и в предыдущих занятиях, создайте необходимые роуты в файле web.php:<br>
+![](archives/pic-5-4.jpg)
+```
+Route::get('get-employee-data', [EmployeeController::class, 'index'); 
+Route::post('store-form', [EmployeeController::class, 'store');
+```
 
-Route::get('/contacts', function () {
-    return view('contacts', [
-        'address' => 'Anytown, USA',
-        'post_code' => '1234567',
-        'email' => 'example@example.com',
-        'phone' => '555-1234-5678'
-    ]);
-});
+6. В файле web.php добавьте ещё один роут с внедрением зависимости параметров запроса в виде id:<br>
+![](archives/pic-5-5.jpg)
+```
+Route::put('/user/{'id'},[EmployeeController::class,'update']);
+```
 
+7. Добавьте соответствующий метод в созданный ранее контроллер:<br>
+![](archives/pic-5-6.jpg)
 
+```
+public function opdate(Request $request, $id)
+{
+    // Допишите функционал метода тут..
+}
+```
+   Добавьте новую переменную id. Поместите в неё id из параметров запроса, обновите данные о пользователе: name, email и так далее.
+
+8. Создайте две новые функции getPath(), getUrl(), в которых необходимо получить и записать в переменную путь и URL запроса. Для этого воспользуйтесь встроенными в класс Request методами $request->path() и $request->url();
+
+Данные методы можно вызывать внутри других методов — update и store, чтобы получать служебную информацию о запросе.
+
+9. В форму ввода добавьте новое текстовое поле textarea, куда необходимо передавать данные в формате JSON, например:<br>
+![](archives/pic-5-7.jpg)
+```
+[
+"address": {
+    "street":"Kulas Light",
+    "suite":"Apt.556",
+    "city":"Gwenborough",
+    "zipcode":"92998-3874",
+    "geo":{
+        "lat":"-37.3159",
+        "lng":"81.1496"
+        }
+    }
+]
+```
+
+10. Обновите функции store и update. Преобразуйте полученный из запроса JSON в переменную PHP. Для этого воспользуйтесь методом json_decode().
+
+11. Создайте произвольное количество новых php переменных, в которые поместите отдельные поля из пришедших данных в формате JSON. Например:<br>
+![](archives/pic-5-8.jpg)
 ``` 
-
-6. Добавляем содержимое для файлов (по заданию):
-- resources/views/layouts/default.blade.php
-- resources/views/includes/head.blade.php
-- resources/views/includes/header.blade.php
-- resources/views/includes/footer.blade.php
-- resources/views/home.blade.php
-- resources/views/contacts.blade.php
-
-7. В проект возможно подключить стили в CSS файле. <br>
-   Файл styles.css размещаем в папке public/css. <br>
-   В файле resources/views/includes/head.blade.php для этого вписываем строку для подключения CSS файла, то есть размещаем подключение стилей в head страницы сайта:
+$name=$request->input('user.name'); 
 ```
-<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
+<br><br>
+
+### Домашнее задание
+<br><br>  
+
+1. В папке resources/views создаем файлы шаблонов для страниц:
+- get-employee-data.blade.php
+- store-form.blade.php
+- update-form.blade.php
+
+2. С помощью команды ```php artisan make:controller EmployeeController``` содаем новый контроллер в папке app/Http/Controllers
+
+3. Записываем в содержимое web.php дополнительные маршруты:
 ```
-Проверяем загруженные стили, в браузере ```http://localhost:8000/css/styles.css```
-8. Повторно открываем страницы проекта:
-- страница home
-![](archives/hw-4-1.jpg)
-- страница contacts
-![](archives/hw-4-2.jpg)
+Route::get('get-employee-data', [EmployeeController::class, 'index']);
+Route::post('store-form', [EmployeeController::class, 'store']);
+Route::get('store-form', [EmployeeController::class, 'showStoredData']);
+Route::put('user/{id}', [EmployeeController::class, 'update']);
+
+```
+
+4. Размещаем файл стилей main.css в директории public/css проекта.
+5. Записываем в контроллер код для обработки данных из формы для записи в файл в формате JSON.
+6. Страница формы открывается по адресу:
+```
+http://127.0.0.1:8000/get-employee-data
+
+```
+![](archives/5-0-store.jpg) <br>
+7. Страница со списком открывается по адресу:
+```
+http://127.0.0.1:8000/store-form
+
+```
+![](archives/5-1-store.jpg) <br>
+
+8. Данные сохраняются в файле storage/app/private/employees.json:
 
 
-<br><br><br>
 
 
-**Советы и рекомендации:**<br>
-
-- При проектировании шаблонов думайте о том, какие участки разметки можно будет переиспользовать позже, вынести в отдельные файлы и компоненты.
-
-<hr>
+<br><br><hr>
 **В качестве решения приложить:** <br>
 ➔ ссылку на репозиторий с домашним заданием <br>
 ⚹ записать необходимые пояснения к выполненному заданию<hr><br>
-**Критерии оценки:**<br>
-
+**Критерии оценки**<br>
 **Принято:**<br>
-• выполнены все пункты задания;<br>
-• в работе используются указанные инструменты и соблюдены условия;<br>
-• код корректно отформатирован по стандартам программирования на PHP;<br>
-• скрипт запускается, выводит различные данные на экран, не вызывает ошибок.<br>
+— выполнены все пункты работы;<br>
+— в работе используются указанные инструменты и соблюдены все пункты задания;<br>
+— код корректно отформатирован по стандартам программирования на PHP;<br>
+— скрипт запускается, выводит различные данные на экран, не вызывает ошибок.<br>
 
 **На доработку:**<br>
-• выполнены не все обязательные пункты задания;<br>
-• задание выполнено с ошибками.<br>
+работа выполнена не полностью или с ошибками.<br>
 
 **Как отправить работу на проверку:**<br>
-
 Отправьте коммит, содержащий код задания, на ветку master в вашем репозитории и пришлите его URL (URL Merge Request’а) через форму. Репозиторий должен быть public.<br>
-<br><br><br>
 
 ![PHP Laravel Framework](archives/i-min.jpg)
-[README-LARAVEL.md](README-LARAVEL.md)
 
 <br><br><br>

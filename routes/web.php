@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployeeController;
 
 //Route::get('/', function () {
 //    return view('welcome');
@@ -23,3 +24,8 @@ Route::get('/contacts', function () {
         'phone' => '555-1234-5678'
     ]);
 });
+
+Route::get('get-employee-data', [EmployeeController::class, 'index']);
+Route::post('store-form', [EmployeeController::class, 'store']);
+Route::get('store-form', [EmployeeController::class, 'showStoredData']);
+Route::put('user/{id}', [EmployeeController::class, 'update']);
