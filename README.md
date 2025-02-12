@@ -122,6 +122,19 @@ Route::get('/contacts', function () {
 - resources/views/home.blade.php
 - resources/views/contacts.blade.php
 
+7. В проект возможно подключить стили в CSS файле. <br>
+   Файл styles.css размещаем в папке public/css. <br>
+   В файле resources/views/includes/head.blade.php для этого вписываем строку для подключения CSS файла, то есть размещаем подключение стилей в head страницы сайта:
+```
+<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+```
+Проверяем загруженные стили, в браузере ```http://localhost:8000/css/styles.css```
+8. Повторно открываем страницы проекта:
+- страница home
+![](archives/hw-4-1.jpg)
+- страница contacts
+![](archives/hw-4-2.jpg)
+
 
 <br><br><br>
 
